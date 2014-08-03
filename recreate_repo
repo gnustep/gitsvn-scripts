@@ -1,8 +1,8 @@
 #!/bin/sh
 
-username = $1
-password = $2
-repo = $3
+username=$1
+password=$2
+repo=$3
 
 ${HOME}/bin/delete_repo ${username} ${password} ${repo}
 ${HOME}/bin/create_repo ${username} ${password} ${repo}

@@ -1,0 +1,13 @@
+#!/usr/bin/ruby
+
+require 'github_api'
+
+username = ARGV[0]
+password = ARGV[1]
+repo_name = ARGV[2]
+
+username_string = 'username:password'.gsub('username',username).gsub('password',password)
+
+github = Github.new basic_auth: 'username_string'.gsub('username_string',username_string)
+github.repos.create :name => 'repo'.gsub('repo',repo_name)
+

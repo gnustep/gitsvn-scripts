@@ -1,0 +1,15 @@
+EXPORTURL=$1
+REMOTEURL=$2
+DIR=$3
+echo "++++++++"
+echo "*** Export URL: ${EXPORTURL}"
+cd ${HOME}/repositories/staging
+git svn clone --stdlayout ${EXPORTURL}
+echo "*** Adding origin: ${REMOTEURL}"
+cd ${DIR}
+git remote add origin ${REMOTEURL}
+echo "*** Doing initial push"
+git push -u origin master
+cd ..
+mv ${HOME}/repositories/staging/${DIR} ${HOME}/repositories/github 
+echo "++++++++"

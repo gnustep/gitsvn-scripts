@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "**** Update all GNUstep repositories..."
+BASEDIR=$1
+ 
+# /home/gnustep/repositories/github
+for DIR in ${BASEDIR}/*
+do
+	echo "Executing update-gitsvn ${DIR}..."
+	${HOME}/bin/update-gitsvn ${DIR}
+done
+echo "**** Done updateing all repos..."

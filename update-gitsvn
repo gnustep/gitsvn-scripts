@@ -1,0 +1,6 @@
+DIR=$1
+echo "--- Updating ${DIR}"
+cd $DIR
+# update from svn and push to git repo...
+git svn fetch && git svn rebase && git push -f
+echo "--- Finished updating."

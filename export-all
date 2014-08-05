@@ -11,5 +11,6 @@ git remote add origin ${REMOTEURL}
 echo "*** Doing initial push"
 git push -u origin master
 cd ..
+rm -rf ${HOME}/repositories/github/${DIR}
 mv ${HOME}/repositories/staging/${DIR} ${HOME}/repositories/github 
 echo "++++++++"

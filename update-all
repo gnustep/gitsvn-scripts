@@ -8,5 +8,7 @@ for DIR in ${BASEDIR}/*
 do
 	echo "Executing update-gitsvn ${DIR}..."
 	${HOME}/bin/update-gitsvn ${DIR}
+	echo "Executing update-svndcommit ${DIR}..."
+	${HOME}/bin/update-svndcommit ${DIR}
 done
 echo "**** Done updateing all repos..."

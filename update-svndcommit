@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DIR=$1
+
+# Pull git changes and commit them to the SVN repo...
+cd $1
+git pull && git svn dcommit
+

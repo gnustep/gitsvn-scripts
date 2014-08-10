@@ -1,6 +1,20 @@
 EXPORTURL=$1
 REMOTEURL=$2
 DIR=$3
+
+if [ "${EXPORTURL}" = "" ]; then
+   echo "EXPORTURL not defined, please provide EXPORTURL REMOTEURL DIR"
+   exit 0
+fi
+if [ "${REMOTEURL}" = "" ]; then
+   echo "REMOTEURL not defined, please provide EXPORTURL REMOTEURL DIR"
+   exit 0
+fi
+if [ "${DIR}" = "" ]; then
+   echo "DIR not defined, please provide EXPORTURL REMOTEURL DIR"
+   exit 0
+fi
+
 echo "++++++++"
 echo "*** Export URL: ${EXPORTURL}"
 cd ${HOME}/repositories/staging

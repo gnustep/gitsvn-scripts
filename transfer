@@ -1,0 +1,19 @@
+#!/bin/sh
+USERNAME=$1
+PASSWORD=$2
+
+if [ "${USERNAME}" = "" ]; then
+   echo "username not defined, please provide username and password"
+   exit 0
+fi
+if [ "${PASSWORD}" = "" ]; then
+   echo "password not defined, please provide username and password"
+   exit 0
+fi
+
+for i in `cat svn-urls.txt`; 
+do 
+    reponame=`basename $i`; 
+    recreate_repo ${USERNAME} ${PASSWORD} $reponame; 
+    export-all $i git@github.com:${USERNAME}/${reponame}.git ${reponame}; 
+done

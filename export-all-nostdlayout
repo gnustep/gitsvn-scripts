@@ -1,0 +1,30 @@
+EXPORTURL=$1
+REMOTEURL=$2
+DIR=$3
+
+if [ "${EXPORTURL}" = "" ]; then
+   echo "EXPORTURL not defined, please provide EXPORTURL REMOTEURL DIR"
+   exit 0
+fi
+if [ "${REMOTEURL}" = "" ]; then
+   echo "REMOTEURL not defined, please provide EXPORTURL REMOTEURL DIR"
+   exit 0
+fi
+if [ "${DIR}" = "" ]; then
+   echo "DIR not defined, please provide EXPORTURL REMOTEURL DIR"
+   exit 0
+fi
+
+echo "++++++++"
+echo "*** Export URL: ${EXPORTURL}"
+cd ${HOME}/repositories/staging
+git svn clone ${EXPORTURL}
+echo "*** Adding origin: ${REMOTEURL}"
+cd ${DIR}
+git remote add origin ${REMOTEURL}
+echo "*** Doing initial push"
+git push -u origin master
+cd ..
+rm -rf ${HOME}/repositories/github/${DIR}
+mv ${HOME}/repositories/staging/${DIR} ${HOME}/repositories/github 
+echo "++++++++"

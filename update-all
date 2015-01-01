@@ -8,4 +8,4 @@ for DIR in ${BASEDIR}/*
 do
 	${HOME}/bin/update-dir ${DIR}
 done
-echo "**** Done updateing all repos..."
+echo "**** Done updating all repos..."

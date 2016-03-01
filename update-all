@@ -10,5 +10,7 @@ do
 	${HOME}/bin/update-gitsvn ${DIR}
 	echo "Executing update-svndcommit ${DIR}..."
 	${HOME}/bin/update-svndcommit ${DIR}
+	echo "Executing update-branches ${DIR}..."
+	${HOME}/bin/update-branches ${DIR}
 done
 echo "**** Done updateing all repos..."

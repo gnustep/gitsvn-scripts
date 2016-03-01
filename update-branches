@@ -1,0 +1,19 @@
+#!/bin/sh
+
+DIR=$1
+
+cd ${DIR}
+CWD=`pwd`
+echo "Updating branches in ${CWD}..."
+
+# make sure to push all branches as well...
+
+echo "* update branches"
+
+for remote in `git branch -r`; do git branch --track $remote; done
+git fetch --all
+git pull --all
+git push --all
+
+echo "* done updating branches"
+

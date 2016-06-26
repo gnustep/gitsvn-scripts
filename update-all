@@ -6,11 +6,6 @@ BASEDIR=$1
 # /home/gnustep/repositories/github
 for DIR in ${BASEDIR}/*
 do
-	echo "Executing update-gitsvn ${DIR}..."
-	${HOME}/bin/update-gitsvn ${DIR}
-	echo "Executing update-svndcommit ${DIR}..."
-	${HOME}/bin/update-svndcommit ${DIR}
-	echo "Executing update-branches ${DIR}..."
-	${HOME}/bin/update-branches ${DIR}
+	${HOME}/bin/update-dir ${DIR}
 done
-echo "**** Done updateing all repos..."
+echo "**** Done updating all repos..."

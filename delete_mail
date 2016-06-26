@@ -1,0 +1,4 @@
+#!/bin/sh
+mail <<EOF
+d *
+EOF

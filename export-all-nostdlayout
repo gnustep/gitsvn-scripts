@@ -18,7 +18,7 @@ fi
 echo "++++++++"
 echo "*** Export URL: ${EXPORTURL}"
 cd ${HOME}/repositories/staging
-git svn clone --stdlayout ${EXPORTURL}
+git svn clone ${EXPORTURL}
 echo "*** Adding origin: ${REMOTEURL}"
 cd ${DIR}
 git remote add origin ${REMOTEURL}

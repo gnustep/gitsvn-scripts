@@ -1,0 +1,8 @@
+#!/bin/sh
+DIR=$1
+
+echo "Executing update-gitsvn ${DIR}..."
+${HOME}/bin/update-gitsvn ${DIR}
+echo "Executing update-svndcommit ${DIR}..."
+${HOME}/bin/update-svndcommit ${DIR}
+

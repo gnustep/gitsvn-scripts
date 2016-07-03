@@ -1,0 +1,26 @@
+#!/bin/sh
+
+for i in `cat ~/files`; do 
+    
+    cd ~/repositories/github/$i; 
+    cd .git;  
+    cd refs; 
+    cd heads;
+    
+    if [ -e origin ]; then
+        cd origin; 
+	sudo rm -rf origin;	
+    fi
+
+    cd ~/repositories/github/$i; 
+    cd .git;  
+    cd refs; 
+    cd remotes; 
+    cd origin; 
+
+    if [ -e origin ]; then	    
+    	sudo rm -rf origin; 
+    fi	
+     
+    echo $i; 
+done

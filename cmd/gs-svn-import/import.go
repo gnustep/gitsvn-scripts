@@ -1,12 +1,12 @@
-package main // import "github.com/gnustep/gitsvn-scripts/cmd/gs-svn-import"
+package main
 
 import (
 	"context"
 	"flag"
 	"fmt"
 	"os"
-	"os/exec"
-	"path"
+
+	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
 var (
@@ -24,45 +24,6 @@ var (
 	subpath   = flag.String("subpath", "", "subpath to lib or app to convert, sans the 'trunk' part. basename will be used as the output git repo name. example: libs/gui => gui, apps/gorm => gorm.")
 )
 
-type SvnCloner struct {
-	CanonicalSubversionURLBase string
-	ActualSubversionURLBase    string
-	OutputGitPathBase          string
-	StdLayout                  bool
-	Subpath                    string
-	AuthorsFilePath            string
-}
-
-func (opts SvnCloner) Clone(ctx context.Context) {
-
-	args := []string{
-		"svn", "clone",
-		"--prefix=svn/",
-		"--preserve-empty-dirs",
-	}
-
-	if opts.ActualSubversionURLBase != "" {
-		args = append(args, "--rewrite-root="+opts.CanonicalSubversionURLBase)
-	}
-	if opts.StdLayout {
-		args = append(args, "--stdlayout")
-	}
-	if opts.AuthorsFilePath != "" {
-		args = append(args, "--authors-file="+opts.AuthorsFilePath)
-	}
-
-	args = append(args, []string{
-		opts.ActualSubversionURLBase + "/" + opts.Subpath,
-		opts.OutputGitPathBase + "/" + path.Base(opts.Subpath),
-	}...)
-
-	cmd := exec.CommandContext(ctx, "git", args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-	cmd.Run()
-}
-
 func main() {
 	flag.Parse()
 
@@ -71,6 +32,7 @@ func main() {
 		return
 	}
 
+	// perform an svn clone
 	c := SvnCloner{
 		ActualSubversionURLBase:    *actualSubversionURLBase,
 		CanonicalSubversionURLBase: *canonicalSubversionURLBase,
@@ -80,4 +42,28 @@ func main() {
 		AuthorsFilePath:            *authorsFilePath,
 	}
 	c.Clone(context.TODO())
+
+	// fetch the oldgit repo
+	oldGit, err := oldGit()
+	if err != nil {
+		return
+	}
+
+	branchesIter, err := oldGit.Branches()
+	if err != nil {
+		fmt.Printf("failed to get branches: %s\n", err)
+		return
+	}
+
+	// TODO(ivucica): maybe validate that the old repo only has refs/heads/master
+	// TODO(ivucica): support branch 'oldimport'?
+	err = branchesIter.ForEach(func(r *plumbing.Reference) error {
+		fmt.Printf("%s\n", r.Strings())
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("failed to iterate over branches: %s\n", err)
+		return
+	}
+
 }

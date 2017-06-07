@@ -66,4 +66,7 @@ func main() {
 		return
 	}
 
+	// invoking matcher
+	fmt.Printf("matching\n")
+	matcher()
 }

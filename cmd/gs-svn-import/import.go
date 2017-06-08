@@ -78,5 +78,7 @@ func main() {
 	if *matchGits {
 		matches := matcher()
 		spew.Dump(matches)
+
+		mixer()
 	}
 }

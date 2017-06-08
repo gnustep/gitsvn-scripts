@@ -22,6 +22,9 @@ var (
 
 	stdLayout = flag.Bool("stdlayout", true, "whether the Subversion repository contains a 'standard' layout; i.e. trunk/branches/tags structure")
 	subpath   = flag.String("subpath", "", "subpath to lib or app to convert, sans the 'trunk' part. basename will be used as the output git repo name. example: libs/gui => gui, apps/gorm => gorm.")
+
+	svnClone = flag.Bool("svn_clone", true, "whether to perform the SVN->Git clone (or just use the local copy blindly)")
+	matchGits = flag.Bool("match_gits", true, "whether to perform matching between the old git and new git repo")
 )
 
 func main() {
@@ -33,15 +36,17 @@ func main() {
 	}
 
 	// perform an svn clone
-	c := SvnCloner{
-		ActualSubversionURLBase:    *actualSubversionURLBase,
-		CanonicalSubversionURLBase: *canonicalSubversionURLBase,
-		OutputGitPathBase:          *outputGitPathBase,
-		StdLayout:                  *stdLayout,
-		Subpath:                    *subpath,
-		AuthorsFilePath:            *authorsFilePath,
+	if *svnClone {
+		c := SvnCloner{
+			ActualSubversionURLBase:    *actualSubversionURLBase,
+			CanonicalSubversionURLBase: *canonicalSubversionURLBase,
+			OutputGitPathBase:          *outputGitPathBase,
+			StdLayout:                  *stdLayout,
+			Subpath:                    *subpath,
+			AuthorsFilePath:            *authorsFilePath,
+		}
+		c.Clone(context.TODO())
 	}
-	c.Clone(context.TODO())
 
 	// fetch the oldgit repo
 	oldGit, err := oldGit()
@@ -68,5 +73,7 @@ func main() {
 
 	// invoking matcher
 	fmt.Printf("matching\n")
-	matcher()
+	if *matchGits {
+		matcher()
+	}
 }

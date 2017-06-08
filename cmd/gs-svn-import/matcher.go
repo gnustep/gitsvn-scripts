@@ -22,60 +22,72 @@ type GitMatch struct {
 	NewGitHash    plumbing.Hash
 }
 
-var (
-	// map from subversion revision to a match entry
-	matches = make(map[SubversionRevision]*GitMatch)
-)
-
 func matcher() {
+	// map from subversion revision to a match entry
+	matches := make(map[SubversionRevision]*GitMatch)
+
+	// in this function, we're abusing closures because .ForEach() API in
+	// go-git does not support passing any context.
 
 	oldGit, _ := git.PlainOpen(*oldGitPathBase + "/" + path.Base(*subpath))
 	oldHeadRef, _ := oldGit.Head()
 	oldHead, _ := oldGit.CommitObject(oldHeadRef.Hash())
+	oldHashesVisited := make(map[plumbing.Hash]bool)
+	var matchOld func(commit *object.Commit) error
+	matchOld = func(commit *object.Commit) error {
+		if _, ok := oldHashesVisited[commit.Hash]; ok {
+			return nil
+		}
+		oldHashesVisited[commit.Hash] = true
+
+		rev, err := revisionFromGitCommitMessage(commit.Message)
+		if err != nil {
+			return err
+		}
+		if _, ok := matches[rev]; !ok {
+			matches[rev] = &GitMatch{
+				SubversionRev: rev,
+				OldGitHash:    commit.Hash,
+			}
+		} else {
+			matches[rev].OldGitHash = commit.Hash
+		}
+
+		commit.Parents().ForEach(matchOld)
+		return nil
+	}
 	matchOld(oldHead)
 
 	newGit, _ := git.PlainOpen(*outputGitPathBase + "/" + path.Base(*subpath))
 	newHeadRef, _ := newGit.Head()
 	newHead, _ := newGit.CommitObject(newHeadRef.Hash())
+	newHashesVisited := make(map[plumbing.Hash]bool)
+	var matchNew func(commit *object.Commit) error
+	matchNew = func(commit *object.Commit) error {
+		if _, ok := newHashesVisited[commit.Hash]; ok {
+			return nil
+		}
+		newHashesVisited[commit.Hash] = true
+
+		rev, err := revisionFromGitCommitMessage(commit.Message)
+		if err != nil {
+			return err
+		}
+		if _, ok := matches[rev]; !ok {
+			matches[rev] = &GitMatch{
+				SubversionRev: rev,
+				NewGitHash:    commit.Hash,
+			}
+		} else {
+			matches[rev].NewGitHash = commit.Hash
+		}
+
+		commit.Parents().ForEach(matchNew)
+		return nil
+	}
 	matchNew(newHead)
 
 	spew.Dump(matches)
-}
-
-func matchOld(commit *object.Commit) error {
-	rev, err := revisionFromGitCommitMessage(commit.Message)
-	if err != nil {
-		return err
-	}
-	if _, ok := matches[rev]; !ok {
-		matches[rev] = &GitMatch{
-			SubversionRev: rev,
-			OldGitHash:    commit.Hash,
-		}
-	} else {
-		matches[rev].OldGitHash = commit.Hash
-	}
-
-	commit.Parents().ForEach(matchOld)
-	return nil
-}
-
-func matchNew(commit *object.Commit) error {
-	rev, err := revisionFromGitCommitMessage(commit.Message)
-	if err != nil {
-		return err
-	}
-	if _, ok := matches[rev]; !ok {
-		matches[rev] = &GitMatch{
-			SubversionRev: rev,
-			NewGitHash:    commit.Hash,
-		}
-	} else {
-		matches[rev].NewGitHash = commit.Hash
-	}
-
-	commit.Parents().ForEach(matchNew)
-	return nil
 }
 
 func revisionFromGitCommitMessage(message string) (SubversionRevision, error) {

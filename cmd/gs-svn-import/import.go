@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"gopkg.in/src-d/go-git.v4/plumbing"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 var (
@@ -74,6 +76,7 @@ func main() {
 	// invoking matcher
 	fmt.Printf("matching\n")
 	if *matchGits {
-		matcher()
+		matches := matcher()
+		spew.Dump(matches)
 	}
 }

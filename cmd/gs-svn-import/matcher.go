@@ -10,8 +10,6 @@ import (
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 type SubversionRevision uint64
@@ -22,9 +20,11 @@ type GitMatch struct {
 	NewGitHash    plumbing.Hash
 }
 
-func matcher() {
+type GitMatches map[SubversionRevision]*GitMatch
+
+func matcher() GitMatches {
 	// map from subversion revision to a match entry
-	matches := make(map[SubversionRevision]*GitMatch)
+	matches := make(GitMatches)
 
 	// in this function, we're abusing closures because .ForEach() API in
 	// go-git does not support passing any context.
@@ -87,7 +87,7 @@ func matcher() {
 	}
 	matchNew(newHead)
 
-	spew.Dump(matches)
+	return matches
 }
 
 func revisionFromGitCommitMessage(message string) (SubversionRevision, error) {

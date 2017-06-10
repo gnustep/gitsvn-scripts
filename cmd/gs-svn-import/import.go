@@ -52,7 +52,14 @@ func mainWithExitCode() int {
 		}
 		err := c.Clone(context.TODO())
 		if err != nil {
+			fmt.Printf("could not clone svn repo: %s\n", err)
 			return 2
+		}
+
+		err = c.CopySubversionRemotesToTagsAndHeads(context.TODO())
+		if err != nil {
+			fmt.Printf("could not copy subversion remotes to tags and heads: %s\n", err)
+			return 10
 		}
 	}
 

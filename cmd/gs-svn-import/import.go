@@ -30,11 +30,15 @@ var (
 )
 
 func main() {
+	os.Exit(mainWithExitCode())
+}
+
+func mainWithExitCode() int {
 	flag.Parse()
 
 	if *subpath == "" {
 		fmt.Println("specify --subpath")
-		return
+		return 1
 	}
 
 	// perform an svn clone
@@ -47,19 +51,22 @@ func main() {
 			Subpath:                    *subpath,
 			AuthorsFilePath:            *authorsFilePath,
 		}
-		c.Clone(context.TODO())
+		err := c.Clone(context.TODO())
+		if err != nil {
+			return 2
+		}
 	}
 
 	// fetch the oldgit repo
 	oldGit, err := oldGit()
 	if err != nil {
-		return
+		return 3
 	}
 
 	branchesIter, err := oldGit.Branches()
 	if err != nil {
 		fmt.Printf("failed to get branches: %s\n", err)
-		return
+		return 4
 	}
 
 	// TODO(ivucica): maybe validate that the old repo only has refs/heads/master
@@ -70,7 +77,7 @@ func main() {
 	})
 	if err != nil {
 		fmt.Printf("failed to iterate over branches: %s\n", err)
-		return
+		return 5
 	}
 
 	// invoking matcher
@@ -79,13 +86,14 @@ func main() {
 		matches, err := matcher(context.TODO())
 		if err != nil{
 			fmt.Printf("failed to match: %s\n", err)
-			return
+			return 6
 		}
 		spew.Dump(matches)
 
 		if err := mixer(context.TODO(), matches); err != nil {
 			fmt.Printf("failed to mix: %s\n", err)
-			return
+			return 7
 		}
 	}
+	return 0
 }

@@ -17,7 +17,7 @@ type SvnCloner struct {
 	AuthorsFilePath            string
 }
 
-func (opts SvnCloner) Clone(ctx context.Context) {
+func (opts SvnCloner) Clone(ctx context.Context) error {
 	args := []string{
 		"svn", "clone",
 		"--prefix=svn/",
@@ -44,5 +44,5 @@ func (opts SvnCloner) Clone(ctx context.Context) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
-	cmd.Run()
+	return cmd.Run()
 }

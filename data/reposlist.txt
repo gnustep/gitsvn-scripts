@@ -1,4 +1,4 @@
 -subpath=tools/buildtool
 -subpath=apps/easydiff
--subpath=plugins/emacs -stdlayout=false
+-subpath=plugins/gs-emacs -stdlayout=false
 

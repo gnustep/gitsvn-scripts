@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
 
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/config"
@@ -14,8 +13,8 @@ import (
 func mixer(ctx context.Context, matches GitMatches) error {
 	fmt.Println("mixing...")
 
-	oldGitPath := *oldGitPathBase + "/" + path.Base(*subpath)
-	newGitPath := *outputGitPathBase + "/" + path.Base(*subpath)
+	oldGitPath := *oldGitPathBase + "/" + *subpath
+	newGitPath := *outputGitPathBase + "/" + *subpath
 
 	oldGit, err := git.PlainOpen(oldGitPath)
 	if err != nil {

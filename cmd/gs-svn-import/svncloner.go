@@ -18,6 +18,11 @@ type SvnCloner struct {
 }
 
 func (opts SvnCloner) Clone(ctx context.Context) error {
+
+	if err := os.MkdirAll(opts.OutputGitPathBase+"/"+path.Dir(opts.Subpath), os.ModeDir|0755); err != nil {
+		return fmt.Errorf("could not make a directory %s to store git svn clone'd repo: %s", opts.OutputGitPathBase+"/"+path.Dir(opts.Subpath))
+	}
+
 	args := []string{
 		"svn", "clone",
 		"--prefix=svn/",
@@ -36,7 +41,7 @@ func (opts SvnCloner) Clone(ctx context.Context) error {
 
 	args = append(args, []string{
 		opts.ActualSubversionURLBase + "/" + opts.Subpath,
-		opts.OutputGitPathBase + "/" + path.Base(opts.Subpath),
+		opts.OutputGitPathBase + "/" + opts.Subpath,
 	}...)
 
 	fmt.Printf("git svn clone'ing\n")

@@ -45,7 +45,7 @@ func matcher(ctx context.Context) (GitMatches, error) {
 	// in this function, we're abusing closures because .ForEach() API in
 	// go-git does not support passing any context.
 
-	oldGit, _ := git.PlainOpen(*oldGitPathBase + "/" + path.Base(*subpath))
+	oldGit, _ := git.PlainOpen(*oldGitPathBase + "/" + *subpath)
 	oldHeadRef, _ := oldGit.Head()
 	oldHead, _ := oldGit.CommitObject(oldHeadRef.Hash())
 	oldHashesVisited := make(map[plumbing.Hash]bool)
@@ -74,7 +74,7 @@ func matcher(ctx context.Context) (GitMatches, error) {
 	}
 	matchOld(oldHead)
 
-	newGit, err := git.PlainOpen(*outputGitPathBase + "/" + path.Base(*subpath))
+	newGit, err := git.PlainOpen(*outputGitPathBase + "/" + *subpath)
 	if err != nil {
 		return nil, fmt.Errorf("could not open newgit repo: %s", err)
 	}
@@ -139,6 +139,10 @@ func revisionFromGitSvnId(gitSvnId string) (SubversionRevision, error) {
 }
 
 func writeMatchFile(ctx context.Context, matches GitMatches, outputFile string) error {
+	if err := os.MkdirAll(path.Dir(outputFile), os.ModeDir|0755); err != nil {
+		return err
+	}
+
 	f, err := os.Create(outputFile)
 	if err != nil {
 		return fmt.Errorf("cannot create matchfile %s: %s", outputFile, err)

@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path"
 
 	"github.com/davecgh/go-spew/spew"
 )
@@ -74,11 +73,11 @@ func mainWithExitCode() int {
 		spew.Dump(matches)
 
 		if err := os.MkdirAll(*matchFileOutputPathBase, os.ModeDir | 0755); err != nil {
-			fmt.Printf("failed to create matchfile's directory: %s", err)
+			fmt.Printf("failed to create matchfile's directory: %s\n", err)
 			return 8
 		}
-		if err := writeMatchFile(context.TODO(), matches, *matchFileOutputPathBase + "/" + path.Base(*subpath) + ".json"); err != nil {
-			fmt.Printf("failed to write matchfile: %s", err)
+		if err := writeMatchFile(context.TODO(), matches, *matchFileOutputPathBase + "/" + *subpath + ".json"); err != nil {
+			fmt.Printf("failed to write matchfile: %s\n", err)
 			return 9
 		}
 

@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os"
 
-	"gopkg.in/src-d/go-git.v4/plumbing"
-
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -57,34 +55,17 @@ func mainWithExitCode() int {
 		}
 	}
 
-	// fetch the oldgit repo
-	oldGit, err := oldGit()
-	if err != nil {
-		return 3
-	}
-
-	branchesIter, err := oldGit.Branches()
-	if err != nil {
-		fmt.Printf("failed to get branches: %s\n", err)
-		return 4
-	}
-
-	// TODO(ivucica): maybe validate that the old repo only has refs/heads/master
-	// TODO(ivucica): support branch 'oldimport'?
-	err = branchesIter.ForEach(func(r *plumbing.Reference) error {
-		fmt.Printf("%s\n", r.Strings())
-		return nil
-	})
-	if err != nil {
-		fmt.Printf("failed to iterate over branches: %s\n", err)
-		return 5
-	}
-
-	// invoking matcher
-	fmt.Printf("matching\n")
+	// perform matching between old and new repo
 	if *matchGits {
+		// fetch the oldgit repo
+		_, err := oldGit()
+		if err != nil {
+			return 3
+		}
+
+		fmt.Printf("matching\n")
 		matches, err := matcher(context.TODO())
-		if err != nil{
+		if err != nil {
 			fmt.Printf("failed to match: %s\n", err)
 			return 6
 		}

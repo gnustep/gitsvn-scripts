@@ -25,7 +25,7 @@ var (
 	stdLayout = flag.Bool("stdlayout", true, "whether the Subversion repository contains a 'standard' layout; i.e. trunk/branches/tags structure")
 	subpath   = flag.String("subpath", "", "subpath to lib or app to convert, sans the 'trunk' part. basename will be used as the output git repo name. example: libs/gui => gui, apps/gorm => gorm.")
 
-	svnClone = flag.Bool("svn_clone", true, "whether to perform the SVN->Git clone (or just use the local copy blindly)")
+	svnClone  = flag.Bool("svn_clone", true, "whether to perform the SVN->Git clone (or just use the local copy blindly)")
 	matchGits = flag.Bool("match_gits", true, "whether to perform matching between the old git and new git repo")
 )
 
@@ -76,9 +76,12 @@ func main() {
 	// invoking matcher
 	fmt.Printf("matching\n")
 	if *matchGits {
-		matches := matcher()
+		matches := matcher(context.TODO())
 		spew.Dump(matches)
 
-		mixer()
+		if err := mixer(context.TODO(), matches); err != nil {
+			fmt.Printf("failed to mix: %s", err)
+			return
+		}
 	}
 }

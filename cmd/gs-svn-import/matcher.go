@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"path"
 	"strconv"
@@ -22,7 +23,7 @@ type GitMatch struct {
 
 type GitMatches map[SubversionRevision]*GitMatch
 
-func matcher() GitMatches {
+func matcher(ctx context.Context) GitMatches {
 	// map from subversion revision to a match entry
 	matches := make(GitMatches)
 

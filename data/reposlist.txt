@@ -1,4 +1,6 @@
 -subpath=tools/buildtool
 -subpath=apps/easydiff
--subpath=plugins/gs-emacs -stdlayout=false
+
+# Repositories without std layout + that were not converted to Git.
+-subpath=plugins/gs-emacs -stdlayout=false -match_gits=false
 

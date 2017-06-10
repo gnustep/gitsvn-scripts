@@ -76,11 +76,15 @@ func main() {
 	// invoking matcher
 	fmt.Printf("matching\n")
 	if *matchGits {
-		matches := matcher(context.TODO())
+		matches, err := matcher(context.TODO())
+		if err != nil{
+			fmt.Printf("failed to match: %s\n", err)
+			return
+		}
 		spew.Dump(matches)
 
 		if err := mixer(context.TODO(), matches); err != nil {
-			fmt.Printf("failed to mix: %s", err)
+			fmt.Printf("failed to mix: %s\n", err)
 			return
 		}
 	}

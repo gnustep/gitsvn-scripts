@@ -23,7 +23,7 @@ type GitMatch struct {
 
 type GitMatches map[SubversionRevision]*GitMatch
 
-func matcher(ctx context.Context) GitMatches {
+func matcher(ctx context.Context) (GitMatches, error) {
 	// map from subversion revision to a match entry
 	matches := make(GitMatches)
 
@@ -59,9 +59,18 @@ func matcher(ctx context.Context) GitMatches {
 	}
 	matchOld(oldHead)
 
-	newGit, _ := git.PlainOpen(*outputGitPathBase + "/" + path.Base(*subpath))
-	newHeadRef, _ := newGit.Head()
-	newHead, _ := newGit.CommitObject(newHeadRef.Hash())
+	newGit, err := git.PlainOpen(*outputGitPathBase + "/" + path.Base(*subpath))
+	if err != nil {
+		return nil, fmt.Errorf("could not open newgit repo: %s", err)
+	}
+	newHeadRef, err := newGit.Head()
+	if err != nil {
+		return nil, fmt.Errorf("could not get newgit repo's head: %s", err)
+	}
+	newHead, err := newGit.CommitObject(newHeadRef.Hash())
+	if err != nil {
+		return nil, fmt.Errorf("could not get newgit repo's head commit object: %s", err)
+	}
 	newHashesVisited := make(map[plumbing.Hash]bool)
 	var matchNew func(commit *object.Commit) error
 	matchNew = func(commit *object.Commit) error {
@@ -88,7 +97,7 @@ func matcher(ctx context.Context) GitMatches {
 	}
 	matchNew(newHead)
 
-	return matches
+	return matches, nil
 }
 
 func revisionFromGitCommitMessage(message string) (SubversionRevision, error) {

@@ -9,7 +9,7 @@ import (
 
 func oldGit() (*git.Repository, error) {
 	oldGitPath := *oldGitPathBase + "/" + *subpath
-	if err := os.MkdirAll(path.Dir(oldGitPath), os.ModeDir | 0755); err != nil {
+	if err := os.MkdirAll(path.Dir(oldGitPath), os.ModeDir|0755); err != nil {
 		return nil, fmt.Errorf("could not make a directory to host old git path %s: %s", oldGitPath, err)
 	}
 	if _, err := os.Stat(oldGitPath); os.IsNotExist(err) {

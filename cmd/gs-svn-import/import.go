@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/davecgh/go-spew/spew"
 )
@@ -16,6 +17,7 @@ var (
 	authorsFilePath = flag.String("authors_file_path", os.Getenv("GOPATH")+"/authors.txt", "path to the authors.txt file")
 
 	outputGitPathBase = flag.String("output_git_path_base", os.Getenv("GOPATH")+"/gs-svn/git", "base path at which output git repos will be placed / updated")
+	matchFileOutputPathBase = flag.String("match_file_output_path_base", os.Getenv("GOPATH")+"/gs-svn/matchfiles", "base path at which matchfiles will be placed / updated; base path will be created")
 
 	oldGitPathBase      = flag.String("old_git_path_base", os.Getenv("GOPATH")+"/gs-svn/oldgit", "base path for old git repositories for which to generate replace refs")
 	generateReplaceRefs = flag.Bool("generate_replace_refs", true, "whether replace refs should be generated for this repository")
@@ -71,10 +73,21 @@ func mainWithExitCode() int {
 		}
 		spew.Dump(matches)
 
+		if err := os.MkdirAll(*matchFileOutputPathBase, os.ModeDir | 0755); err != nil {
+			fmt.Printf("failed to create matchfile's directory: %s", err)
+			return 8
+		}
+		if err := writeMatchFile(context.TODO(), matches, *matchFileOutputPathBase + "/" + path.Base(*subpath) + ".json"); err != nil {
+			fmt.Printf("failed to write matchfile: %s", err)
+			return 9
+		}
+
 		if err := mixer(context.TODO(), matches); err != nil {
 			fmt.Printf("failed to mix: %s\n", err)
 			return 7
 		}
+
 	}
+
 	return 0
 }

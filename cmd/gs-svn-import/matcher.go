@@ -3,7 +3,10 @@ package main
 import (
 	"bufio"
 	"context"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
+	"os"
 	"path"
 	"strconv"
 	"strings"
@@ -19,6 +22,18 @@ type GitMatch struct {
 	SubversionRev SubversionRevision
 	OldGitHash    plumbing.Hash
 	NewGitHash    plumbing.Hash
+}
+
+func (m GitMatch) MarshalJSON() ([]byte, error) {
+	return json.Marshal(&struct {
+		SubversionRev SubversionRevision
+		OldGitHash    string
+		NewGitHash    string
+	}{
+		SubversionRev: m.SubversionRev,
+		OldGitHash:    hex.EncodeToString(m.OldGitHash[:]),
+		NewGitHash:    hex.EncodeToString(m.NewGitHash[:]),
+	})
 }
 
 type GitMatches map[SubversionRevision]*GitMatch
@@ -121,4 +136,16 @@ func revisionFromGitSvnId(gitSvnId string) (SubversionRevision, error) {
 	rev := pathAndRev[1]
 	revInt, err := strconv.Atoi(rev)
 	return SubversionRevision(revInt), err
+}
+
+func writeMatchFile(ctx context.Context, matches GitMatches, outputFile string) error {
+	f, err := os.Create(outputFile)
+	if err != nil {
+		return fmt.Errorf("cannot create matchfile %s: %s", outputFile, err)
+	}
+	defer f.Close()
+
+	e := json.NewEncoder(f)
+	e.SetIndent("", "  ")
+	return e.Encode(matches)
 }

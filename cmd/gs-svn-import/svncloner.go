@@ -79,11 +79,11 @@ func (opts SvnCloner) CopySubversionRemotesToTagsAndHeads(ctx context.Context) e
 func (opts SvnCloner) Clone(ctx context.Context) error {
 
 	if _, err := os.Stat(opts.OutputGitPathBase + "/" + opts.Subpath); err == nil {
-			cmd := exec.CommandContext(ctx, "git", "svn", "fetch")
-			cmd.Dir = opts.OutputGitPathBase + "/" + opts.Subpath
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
-			cmd.Stdin = os.Stdin
+		cmd := exec.CommandContext(ctx, "git", "svn", "fetch")
+		cmd.Dir = opts.OutputGitPathBase + "/" + opts.Subpath
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 		return cmd.Run()
 	} else {
 		if !os.IsNotExist(err) {

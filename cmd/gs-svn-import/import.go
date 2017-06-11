@@ -26,6 +26,7 @@ var (
 
 	svnClone  = flag.Bool("svn_clone", true, "whether to perform the SVN->Git clone (or just use the local copy blindly)")
 	matchGits = flag.Bool("match_gits", true, "whether to perform matching between the old git and new git repo")
+	exportDo  = flag.Bool("export", false, "whether to prepare and perform export onto github")
 )
 
 func main() {
@@ -93,6 +94,13 @@ func mainWithExitCode() int {
 			return 7
 		}
 
+	}
+
+	if *exportDo {
+		if err := export(context.TODO()); err != nil {
+			fmt.Printf("failed to export: %s\n", err)
+			return 12
+		}
 	}
 
 	return 0

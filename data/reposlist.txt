@@ -2,11 +2,8 @@
 -subpath=tools/charsets
 -subpath=tools/make
 -subpath=tools/model-main
--subpath=tools/nfmake
 -subpath=tools/pbxbuild
 -subpath=tools/scripts
--subpath=tools/startup
--subpath=tools/windows-development-installer
 
 -subpath=apps/easydiff
 -subpath=apps/gorm
@@ -85,6 +82,9 @@
 -subpath=tests/retaincount -match_gits=false
 -subpath=tests/testsuite -match_gits=false
 -subpath=tools/installers -match_gits=false
+-subpath=tools/nfmake -match_gits=false
+-subpath=tools/startup -match_gits=false
+-subpath=tools/windows-development-installer -match_gits=false
 
 # Repositories without std layout + that were not converted to Git.
 -subpath=libs/gscoredata -stdlayout=false -match_gits=false

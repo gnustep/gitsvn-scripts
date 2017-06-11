@@ -1,5 +1,6 @@
 CaS = Richard Frith-Macdonald <rfm@gnu.org>
 Fabien_ = Fabien Vallon <fabien@sonappart.net>
+fabien_ = Fabien Vallon <fabien@sonappart.net>
 FredKiefer = Fred Kiefer <fredkiefer@gmx.de>
 GuruWannabe = Larry Coleman <larryliberty@yahoo.com>
 Kazu = Kazunobu Kuriyama <kazunobu.kuriyama@nifty.com>

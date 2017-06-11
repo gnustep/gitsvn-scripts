@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/davecgh/go-spew/spew"
+	//"github.com/davecgh/go-spew/spew"
+	"github.com/golang/glog"
 )
 
 var (
@@ -34,6 +35,7 @@ func main() {
 }
 
 func mainWithExitCode() int {
+	flag.Set("logtostderr", "true")
 	flag.Parse()
 
 	if *subpath == "" {
@@ -53,13 +55,13 @@ func mainWithExitCode() int {
 		}
 		err := c.Clone(context.TODO())
 		if err != nil {
-			fmt.Printf("could not clone svn repo: %s\n", err)
+			glog.Errorf("could not clone svn repo: %s", err)
 			return 2
 		}
 
 		err = c.CopySubversionRemotesToTagsAndHeads(context.TODO())
 		if err != nil {
-			fmt.Printf("could not copy subversion remotes to tags and heads: %s\n", err)
+			fmt.Errorf("could not copy subversion remotes to tags and heads: %s\n", err)
 			return 10
 		}
 	}
@@ -72,25 +74,25 @@ func mainWithExitCode() int {
 			return 3
 		}
 
-		fmt.Printf("matching\n")
+		glog.Info("matching")
 		matches, err := matcher(context.TODO())
 		if err != nil {
-			fmt.Printf("failed to match: %s\n", err)
+			glog.Errorf("failed to match: %s", err)
 			return 6
 		}
-		spew.Dump(matches)
+		//spew.Dump(matches)
 
 		if err := os.MkdirAll(*matchFileOutputPathBase, os.ModeDir|0755); err != nil {
-			fmt.Printf("failed to create matchfile's directory: %s\n", err)
+			glog.Errorf("failed to create matchfile's directory: %s", err)
 			return 8
 		}
 		if err := writeMatchFile(context.TODO(), matches, *matchFileOutputPathBase+"/"+*subpath+".json"); err != nil {
-			fmt.Printf("failed to write matchfile: %s\n", err)
+			glog.Errorf("failed to write matchfile: %s", err)
 			return 9
 		}
 
 		if err := mixer(context.TODO(), matches); err != nil {
-			fmt.Printf("failed to mix: %s\n", err)
+			glog.Errorf("failed to mix: %s", err)
 			return 7
 		}
 
@@ -98,7 +100,7 @@ func mainWithExitCode() int {
 
 	if *exportDo {
 		if err := export(context.TODO()); err != nil {
-			fmt.Printf("failed to export: %s\n", err)
+			glog.Errorf("failed to export: %s", err)
 			return 12
 		}
 	}

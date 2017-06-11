@@ -8,6 +8,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/golang/glog"
 	"gopkg.in/src-d/go-git.v4"
 )
 
@@ -61,7 +62,7 @@ func (opts SvnCloner) CopySubversionRemotesToTagsAndHeads(ctx context.Context) e
 			branchName := path.Base(ref.Name().String())
 			if ref.Name().String() != "refs/remotes/svn/"+branchName {
 
-				fmt.Printf("omitting %s while copying svn refs to usual heads/tags: it's probably in a subdir and probably not a branch", ref.Name().String())
+				glog.Warningf("omitting %s while copying svn refs to usual heads/tags: it's probably in a subdir and probably not a branch", ref.Name().String())
 				continue
 			}
 			f, err := os.Create(outputGitPath + "/.git/refs/heads/" + branchName)
@@ -79,6 +80,7 @@ func (opts SvnCloner) CopySubversionRemotesToTagsAndHeads(ctx context.Context) e
 func (opts SvnCloner) Clone(ctx context.Context) error {
 
 	if _, err := os.Stat(opts.OutputGitPathBase + "/" + opts.Subpath); err == nil {
+		glog.Info("git svn fetch")
 		cmd := exec.CommandContext(ctx, "git", "svn", "fetch")
 		cmd.Dir = opts.OutputGitPathBase + "/" + opts.Subpath
 		cmd.Stdout = os.Stdout
@@ -116,7 +118,7 @@ func (opts SvnCloner) Clone(ctx context.Context) error {
 		opts.OutputGitPathBase + "/" + opts.Subpath,
 	}...)
 
-	fmt.Printf("git svn clone'ing\n")
+	glog.Infof("git svn clone'ing\n")
 	cmd := exec.CommandContext(ctx, "git", args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

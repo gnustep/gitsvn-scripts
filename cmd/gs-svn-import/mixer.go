@@ -6,12 +6,13 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/golang/glog"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/config"
 )
 
 func mixer(ctx context.Context, matches GitMatches) error {
-	fmt.Println("mixing...")
+	glog.Info("mixing...")
 
 	oldGitPath := *oldGitPathBase + "/" + *subpath
 	newGitPath := *outputGitPathBase + "/" + *subpath
@@ -87,7 +88,7 @@ func addReplaceRefs(ctx context.Context, matches GitMatches, newGitPath string) 
 	}
 
 	for rev, match := range matches {
-		fmt.Printf("writing rev %d: %+v\n", rev, match)
+		glog.V(2).Infof("writing rev %d: %+v", rev, match)
 
 		f, err := os.Create(newGitPath + "/.git/refs/replace/" + match.OldGitHash.String())
 		if err != nil {

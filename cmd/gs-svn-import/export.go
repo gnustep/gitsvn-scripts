@@ -7,12 +7,14 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/golang/glog"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/config"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
 func export(ctx context.Context) error {
+	glog.Info("exporting new git repository to github")
 	newGitPath := *outputGitPathBase + "/" + *subpath
 	newGit, err := git.PlainOpen(newGitPath)
 	if err != nil {
@@ -23,9 +25,11 @@ func export(ctx context.Context) error {
 		Name: "github",
 		URL:  "https://github.com/gnustep/" + strings.Replace(*subpath, "/", "-", -1),
 	}
-	_, err = newGit.CreateRemote(remoteCfg)
-	if err != nil {
-		return fmt.Errorf("could not create remote config for %s: %s", *subpath, err)
+	if _, err := newGit.Remote("github"); err != nil {
+		_, err = newGit.CreateRemote(remoteCfg)
+		if err != nil {
+			return fmt.Errorf("could not create remote config for %s: %s", *subpath, err)
+		}
 	}
 
 	cmd := exec.CommandContext(ctx, "git", "push", "-u", "github", "old")
@@ -64,7 +68,7 @@ func export(ctx context.Context) error {
 		return nil
 	})
 
-	args := append([]string{"push", "-u", "-f"}, refNames...)
+	args := append([]string{"push", "-u", "-f", "github"}, refNames...)
 
 	cmd = exec.CommandContext(ctx, "git", args...)
 	cmd.Dir = newGitPath
@@ -73,6 +77,16 @@ func export(ctx context.Context) error {
 	cmd.Stdin = os.Stdin
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("could not replace other branches onto the remote repo %s: %s", remoteCfg.URL, err)
+	}
+
+	// push tags
+	cmd = exec.CommandContext(ctx, "git", "push", "--tags", "github")
+	cmd.Dir = newGitPath
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("could not push tags onto remote repo %s: %s", remoteCfg.URL, err)
 	}
 
 	// push replace refs

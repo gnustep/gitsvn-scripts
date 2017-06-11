@@ -5,6 +5,8 @@ import (
 	"gopkg.in/src-d/go-git.v4"
 	"os"
 	"path"
+
+	"github.com/golang/glog"
 )
 
 func oldGit() (*git.Repository, error) {
@@ -17,19 +19,19 @@ func oldGit() (*git.Repository, error) {
 			URL:               "https://github.com/gnustep/" + path.Base(*subpath),
 			RecurseSubmodules: git.DefaultSubmoduleRecursionDepth,
 		}
-		fmt.Printf("cloning old repo from %s to %s\n", opts.URL, oldGitPath)
+		glog.Infof("cloning old repo from %s to %s\n", opts.URL, oldGitPath)
 
 		oldGit, err := git.PlainClone(*oldGitPathBase+"/"+*subpath, false, opts)
 		if err != nil {
-			fmt.Printf("failed to git clone the old repo: %s\n", err)
+			glog.Errorf("failed to git clone the old repo: %s", err)
 			return nil, err
 		}
 		return oldGit, nil
 	} else if err != nil {
-		fmt.Printf("error checking if oldgit path %s exists: %s\n", oldGitPath, err)
+		glog.Errorf("error checking if oldgit path %s exists: %s", oldGitPath, err)
 		return nil, err
 	} else {
-		fmt.Printf("skipping oldgit clone as the oldgit repo exists locally\n")
+		glog.Info("skipping oldgit clone as the oldgit repo exists locally")
 		return git.PlainOpen(oldGitPath)
 	}
 }

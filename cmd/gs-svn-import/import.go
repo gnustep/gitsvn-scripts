@@ -13,7 +13,7 @@ var (
 	canonicalSubversionURLBase = flag.String("canonical_subversion_url_base", "svn+ssh://svn.gna.org/svn/gnustep", "base URL hosting GNUstep repositories which is to be used in git-svn-id in commit descriptions")
 	actualSubversionURLBase    = flag.String("actual_subversion_url_base", "svn+ssh://svn.gna.org/svn/gnustep", "actual URL from which the GNUstep repositories will be fetched; this could be a locally rsync'ed copy")
 
-	authorsFilePath = flag.String("authors_file_path", os.Getenv("GOPATH")+"/authors.txt", "path to the authors.txt file")
+	authorsFilePath = flag.String("authors_file_path", os.Getenv("GOPATH")+"/src/github.com/gnustep/gitsvn-scripts/data/authors.txt", "path to the authors.txt file")
 
 	outputGitPathBase       = flag.String("output_git_path_base", os.Getenv("GOPATH")+"/gs-svn/git", "base path at which output git repos will be placed / updated")
 	matchFileOutputPathBase = flag.String("match_file_output_path_base", os.Getenv("GOPATH")+"/gs-svn/matchfiles", "base path at which matchfiles will be placed / updated; base path will be created")

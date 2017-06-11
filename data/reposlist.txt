@@ -11,8 +11,6 @@
 -subpath=apps/gworkspace
 -subpath=apps/nibtool
 -subpath=apps/projectcenter
--subpath=apps/systempreferences
--subpath=apps/thematic
 
 -subpath=libs/audiotoolbox
 -subpath=libs/back
@@ -85,6 +83,8 @@
 -subpath=tools/nfmake -match_gits=false
 -subpath=tools/startup -match_gits=false
 -subpath=tools/windows-development-installer -match_gits=false
+-subpath=apps/systempreferences -match_gits=false
+-subpath=apps/thematic -match_gits=false
 
 # Repositories without std layout + that were not converted to Git.
 -subpath=libs/gscoredata -stdlayout=false -match_gits=false

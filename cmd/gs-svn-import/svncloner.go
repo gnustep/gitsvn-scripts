@@ -78,6 +78,19 @@ func (opts SvnCloner) CopySubversionRemotesToTagsAndHeads(ctx context.Context) e
 
 func (opts SvnCloner) Clone(ctx context.Context) error {
 
+	if _, err := os.Stat(opts.OutputGitPathBase + "/" + opts.Subpath); err == nil {
+			cmd := exec.CommandContext(ctx, "git", "svn", "fetch")
+			cmd.Dir = opts.OutputGitPathBase + "/" + opts.Subpath
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			cmd.Stdin = os.Stdin
+		return cmd.Run()
+	} else {
+		if !os.IsNotExist(err) {
+			return fmt.Errorf("could not stat the path to svn git clone %s: %s", opts.OutputGitPathBase+"/"+opts.Subpath, err)
+		}
+	}
+
 	if err := os.MkdirAll(opts.OutputGitPathBase+"/"+path.Dir(opts.Subpath), os.ModeDir|0755); err != nil {
 		return fmt.Errorf("could not make a directory %s to store git svn clone'd repo: %s", opts.OutputGitPathBase+"/"+path.Dir(opts.Subpath))
 	}

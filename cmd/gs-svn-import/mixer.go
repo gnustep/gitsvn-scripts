@@ -93,9 +93,10 @@ func addReplaceRefs(ctx context.Context, matches GitMatches, newGitPath string) 
 		if err != nil {
 			return fmt.Errorf("failed to create replace ref for r%d (old hash: %s, new hash: %s): %s", match.SubversionRev, match.OldGitHash, match.NewGitHash, err)
 		}
-		defer f.Close()
 
 		f.WriteString(match.NewGitHash.String())
+
+		f.Close()
 	}
 	return nil
 }

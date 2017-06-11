@@ -1,7 +1,95 @@
 -subpath=tools/buildtool
+-subpath=tools/charsets
+-subpath=tools/make
+-subpath=tools/model-main
+-subpath=tools/nfmake
+-subpath=tools/pbxbuild
+-subpath=tools/scripts
+-subpath=tools/startup
+-subpath=tools/windows-development-installer
+
 -subpath=apps/easydiff
+-subpath=apps/gorm
+-subpath=apps/gsldapwebexplorer
+-subpath=apps/gworkspace
+-subpath=apps/nibtool
 -subpath=apps/projectcenter
+-subpath=apps/systempreferences
+-subpath=apps/thematic
+
+-subpath=libs/audiotoolbox
+-subpath=libs/back
+-subpath=libs/base
+-subpath=libs/buildkit
+-subpath=libs/corebase
+-subpath=libs/coreimage
+-subpath=libs/corenetwork
+-subpath=libs/dbuskit
+-subpath=libs/ec
+-subpath=libs/gdl2
+-subpath=libs/gsantlr
+-subpath=libs/gscrypt
+-subpath=libs/gsgd
+-subpath=libs/gsldap
+-subpath=libs/gsweb
+-subpath=libs/gui
+-subpath=libs/guile
+-subpath=libs/java
+-subpath=libs/opal
+-subpath=libs/palettes
+-subpath=libs/performance
+-subpath=libs/ppd
+-subpath=libs/quartzcore
+-subpath=libs/renaissance
+-subpath=libs/ruby
+-subpath=libs/simplewebkit
+-subpath=libs/smbkit
+-subpath=libs/sqlclient
+-subpath=libs/steptalk
+-subpath=libs/xcode
+
+-subpath=tests/examples
+
+
+# DevModules and Modules
+# Not sure what to do with these. Some contain documentation, some
+# contain makefiles.
+# Possibly best to convert and then turn externals into git submodules?
+# devmodules/{core,dev-apps,dev-libs,plugins,tests,usr-apps}
+# modules/{core,dev-apps,dev-libs,plugins,tests,usr-apps}
+
+# Omitting intentionally:
+# libs/libobjc2 - already on github
+# trunk/* - empty folder
+# website/* - empty folder; original still maintained in CVS
+
+# Might migrate in future:
+# libs/libobjc - old runtime
+# obsolete/* - various obsolete projects which can be extracted from
+# subversion, for now
+
+# Only has 'tags' folder. Not sure how much will that confuse git-svn.
+# Skipping for now.
+#-subpath=tools/nib2gmodel
+
+# Repositories that were not converted to git.
+-subpath=apps/interfacecreator -match_gits=false
+-subpath=libs/mica -match_gits=false
+-subpath=libs/sysconfig -match_gits=false
+-subpath=libs/ucsdata -match_gits=false
+-subpath=libs/uikit -match_gits=false
+-subpath=libs/webserver -match_gits=false
+-subpath=libs/webservices -match_gits=false
+-subpath=tests/gormtest -match_gits=false
+-subpath=tests/palettetest -match_gits=false
+-subpath=tests/retaincount -match_gits=false
+-subpath=tests/testsuite -match_gits=false
+-subpath=tools/installers -match_gits=false
 
 # Repositories without std layout + that were not converted to Git.
+-subpath=libs/gscoredata -stdlayout=false -match_gits=false
 -subpath=plugins/gs-emacs -stdlayout=false -match_gits=false
+-subpath=plugins/session -stdlayout=false -match_gits=false
+-subpath=plugins/themes/Gtk -stdlayout=false -match_gits=false
+-subpath=plugins/themes/WinUXTheme -stdlayout=false -match_gits=false
 

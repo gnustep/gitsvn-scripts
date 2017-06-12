@@ -13,7 +13,7 @@ import (
 	"gopkg.in/src-d/go-git.v4/plumbing"
 )
 
-func export(ctx context.Context) error {
+func export(ctx context.Context, skippingOldIsFine bool) error {
 	glog.Info("exporting new git repository to github")
 	newGitPath := *outputGitPathBase + "/" + *subpath
 	newGit, err := git.PlainOpen(newGitPath)
@@ -38,7 +38,11 @@ func export(ctx context.Context) error {
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("could not push old branch to remote repo for %s: %s", *subpath, err)
+		if skippingOldIsFine {
+			glog.Warningf("could not push old branch to remote repo for %s (but continuing because the relevant option was passed): %s", *subpath, err)
+		} else {
+			return fmt.Errorf("could not push old branch to remote repo for %s: %s", *subpath, err)
+		}
 	}
 
 	cmd = exec.CommandContext(ctx, "git", "push", "-u", "-f", "github", "master")

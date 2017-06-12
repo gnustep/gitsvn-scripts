@@ -45,9 +45,6 @@
 
 -subpath=tests/examples
 
-###### NO REPOSITORY BELOW THIS POINT HAS BEEN PUSHED TO GITHUB
-
-
 # DevModules and Modules
 # Not sure what to do with these. Some contain documentation, some
 # contain makefiles.

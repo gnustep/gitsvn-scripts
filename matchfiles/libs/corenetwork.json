@@ -1,0 +1,12 @@
+{
+  "37177": {
+    "SubversionRev": 37177,
+    "OldGitHash": "9217329dab93a5c79f43e66069314c5050ae6276",
+    "NewGitHash": "a26ba9da2c8ad08e77526c48de67d62353506a2f"
+  },
+  "37677": {
+    "SubversionRev": 37677,
+    "OldGitHash": "e5026ac4d129f9ee3c161c64792b819c04ddefa4",
+    "NewGitHash": "f447559d14d1d50bee5b74c84df9971604d26064"
+  }
+}

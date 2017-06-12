@@ -1,0 +1,17 @@
+{
+  "33674": {
+    "SubversionRev": 33674,
+    "OldGitHash": "3a8a7152137f587650b38fdf6f7b24cb753692ff",
+    "NewGitHash": "955d2dee677b7690164757fd73571ec9badb28b1"
+  },
+  "33676": {
+    "SubversionRev": 33676,
+    "OldGitHash": "acc790ba7cbe1fd0c494571e63f4eb05a05543e5",
+    "NewGitHash": "3316ae06a4c51f484430030f79b02d3b3db1ccc7"
+  },
+  "39148": {
+    "SubversionRev": 39148,
+    "OldGitHash": "a41a8f89c19628151e5dcbb7e5255905e8aa3e1a",
+    "NewGitHash": "33f0349814c3230fbbca9ff87bc9b8765303edac"
+  }
+}

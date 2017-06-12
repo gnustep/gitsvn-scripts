@@ -1,0 +1,42 @@
+{
+  "15103": {
+    "SubversionRev": 15103,
+    "OldGitHash": "82ff7b7332a4c309c735aa0318673e9b5ecee4fb",
+    "NewGitHash": "9cf222ec8ea0537af3bb6e56785400cf6d56c454"
+  },
+  "15631": {
+    "SubversionRev": 15631,
+    "OldGitHash": "449ae70902ac117d323301c071c5f410e36e4c9e",
+    "NewGitHash": "0f495eb5e7fbbe58b6b97e0e03e07a237b0d3a7a"
+  },
+  "23828": {
+    "SubversionRev": 23828,
+    "OldGitHash": "b5c3702e25130209e868bff46a601bb1d31e6f06",
+    "NewGitHash": "41c9a57eed96a2def4613550038ddacbb5eb6ba6"
+  },
+  "24627": {
+    "SubversionRev": 24627,
+    "OldGitHash": "2bb5ec72d76952263c5fbb0884203771d09f5022",
+    "NewGitHash": "31079e8e9d620e767f9fff2c62afd274d0de64cb"
+  },
+  "31301": {
+    "SubversionRev": 31301,
+    "OldGitHash": "1aa3a68e7b125d5b6fe6c39813587d4eeb43dc75",
+    "NewGitHash": "a7975480f9a0df6181a23ada62997fc11c94596b"
+  },
+  "6399": {
+    "SubversionRev": 6399,
+    "OldGitHash": "1cad98a44448679554eafe71934babace6f65989",
+    "NewGitHash": "9e8e2266e38af88e16cdf42af27779223cd7e554"
+  },
+  "6403": {
+    "SubversionRev": 6403,
+    "OldGitHash": "c231061cdfef971a7d4931e47953305ddb8040db",
+    "NewGitHash": "a830f6df6d81443e8b667cf44029a413e15299a0"
+  },
+  "6408": {
+    "SubversionRev": 6408,
+    "OldGitHash": "450f2efea4de4fbd479b3a775a727eb82c3bc413",
+    "NewGitHash": "70901b2bc26ac38be8693463a7fe87abd030bf51"
+  }
+}

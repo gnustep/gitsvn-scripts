@@ -2,18 +2,20 @@
 
 username=$1
 password=$2
+prefix=$3
+repo=$4
 
 for dir in *
 do
-	echo "======= Creating repository: gnustep-${dir}"
-	delete_repo ${username} ${password} gnustep-${dir}
-	create_repo ${username} ${password} gnustep-${dir}
-	echo "Importing ${dir} into git..."
+	echo "======= Creating repository: ${prefix}-${dir}"
+	delete_repo ${username} ${password} ${prefix}-${dir}
+	create_repo ${username} ${password} ${prefix}-${dir}
+	echo "Importing ${dir} with prefix ${prefix} into git repo ${repo}..."
 	cd ${dir}
 	git remote rm origin
-	git remote add origin git@github.com:gnustep/gnustep-${dir}.git
+	git remote add origin git@github.com:${repo}/${prefix}-${dir}.git
 	git-setup
-	git push -u origin master
+	git push -u origin main
 	cd ..
-	echo "====== Done: gnustep-${dir}"
+	echo "====== Done: ${prefix}-${dir}"
 done

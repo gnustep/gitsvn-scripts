@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "**** Update all GNUstep repositories..."
+echo "**** Update all repositories..."
 BASEDIR=$1
  
 # /home/gnustep/repositories/github

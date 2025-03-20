@@ -1,3 +1,5 @@
+#!/bin/sh
+
 EXPORTURL=$1
 REMOTEURL=$2
 DIR=$3
@@ -16,15 +18,24 @@ if [ "${DIR}" = "" ]; then
 fi
 
 echo "++++++++"
+
+# Export URL...
 echo "*** Export URL: ${EXPORTURL}"
 cd ${HOME}/repositories/staging
 git svn clone ${EXPORTURL}
+
+# Add origin...
 echo "*** Adding origin: ${REMOTEURL}"
 cd ${DIR}
 git remote add origin ${REMOTEURL}
+
+# Do push...
 echo "*** Doing initial push"
 git push -u origin master
 cd ..
+
+# Cleanup
 rm -rf ${HOME}/repositories/github/${DIR}
 mv ${HOME}/repositories/staging/${DIR} ${HOME}/repositories/github 
+
 echo "++++++++"

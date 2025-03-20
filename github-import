@@ -7,15 +7,18 @@ repo=$4
 
 for dir in *
 do
-	echo "======= Creating repository: ${prefix}-${dir}"
-	delete_repo ${username} ${password} ${prefix}-${dir}
-	create_repo ${username} ${password} ${prefix}-${dir}
-	echo "Importing ${dir} with prefix ${prefix} into git repo ${repo}..."
-	cd ${dir}
-	git remote rm origin
-	git remote add origin git@github.com:${repo}/${prefix}-${dir}.git
-	git-setup
-	git push -u origin main
-	cd ..
-	echo "====== Done: ${prefix}-${dir}"
+    # Delete and recreate the repo...
+    echo "======= Creating repository: ${prefix}-${dir}"
+    delete_repo ${username} ${password} ${prefix}-${dir}
+    create_repo ${username} ${password} ${prefix}-${dir}
+    echo "Importing ${dir} with prefix ${prefix} into git repo ${repo}..."
+
+    # Go to the dir and init the repo...
+    cd ${dir}
+    git remote rm origin
+    git remote add origin git@github.com:${repo}/${prefix}-${dir}.git
+    git-setup
+    git push -u origin main
+    cd ..
+    echo "====== Done: ${prefix}-${dir}"
 done

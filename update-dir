@@ -2,9 +2,6 @@
 DIR=$1
 
 echo "Executing update-gitsvn ${DIR}..."
-${HOME}/bin/update-gitsvn ${DIR}
+update-gitsvn ${DIR}
 echo "Executing update-svndcommit ${DIR}..."
-${HOME}/bin/update-svndcommit ${DIR}
-#echo "Executing update-branches ${DIR}..."
-#${HOME}/bin/update-branches ${DIR}
-
+update-svndcommit ${DIR}

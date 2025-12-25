@@ -26,3 +26,7 @@ Scripts for migrating SVN repositories to Git.
 - Authentication: prefer `GITHUB_TOKEN` in the environment; fall back to username/password arguments where supported.
 - Dry runs: `export-all` accepts `-n/--dry-run` to print actions without executing.
 - Safety: most scripts use `set -euo pipefail`; destructive operations (like `rm -rf` during export) run only after successful steps when not in dry-run.
+
+## Installation
+
+- These scripts should be installed in "bin" under ${HOME}.

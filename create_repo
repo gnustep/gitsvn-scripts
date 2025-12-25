@@ -3,11 +3,28 @@
 require 'github_api'
 
 username = ARGV[0]
-password = ARGV[1]
+password_or_token = ARGV[1]
 repo_name = ARGV[2]
+token = ENV['GITHUB_TOKEN']
 
-username_string = 'username:password'.gsub('username',username).gsub('password',password)
+if repo_name.nil? || repo_name.empty?
+	warn "Usage: create_repo USERNAME PASSWORD_OR_TOKEN REPO_NAME (or set GITHUB_TOKEN)"
+	exit 1
+end
 
-github = Github.new basic_auth: 'username_string'.gsub('username_string',username_string)
-github.repos.create :name => 'repo'.gsub('repo',repo_name)
+begin
+	github = if token && !token.empty?
+						 Github.new oauth_token: token
+					 elsif username && password_or_token
+						 Github.new basic_auth: "#{username}:#{password_or_token}"
+					 else
+						 raise ArgumentError, 'Provide GITHUB_TOKEN or username/password arguments'
+					 end
+
+	github.repos.create name: repo_name
+	puts "Created repository: #{repo_name}"
+rescue StandardError => e
+	warn "Failed to create repository #{repo_name}: #{e.message}"
+	exit 1
+end
 

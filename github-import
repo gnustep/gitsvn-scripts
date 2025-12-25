@@ -1,26 +1,31 @@
 #!/bin/sh
+set -euo pipefail
 
-username=$1
-password=$2
-prefix=$3
-repo=$4
+username=${1:-}
+password=${2:-}
+prefix=${3:-}
+repo=${4:-}
 
-for dir in *
-do
-    # Delete and recreate the repo...
+if [ -z "${username}" ] || [ -z "${password}" ] || [ -z "${prefix}" ] || [ -z "${repo}" ]; then
+    echo "Usage: github-import USERNAME PASSWORD PREFIX ORG_OR_USER" >&2
+    exit 1
+fi
+
+for dir in *; do
+    [ -d "${dir}" ] || continue
+
     echo "======= Creating repository: ${prefix}-${dir}"
-    delete_repo ${username} ${password} ${prefix}-${dir}
-    create_repo ${username} ${password} ${prefix}-${dir}
+    delete_repo "${username}" "${password}" "${prefix}-${dir}" 2>/dev/null || true
+    create_repo "${username}" "${password}" "${prefix}-${dir}"
     echo "Importing ${dir} with prefix ${prefix} into git repo ${repo}..."
 
-    # Go to the dir and init the repo...
-    push ${dir}
-    git remote rm origin
-    git remote add origin git@github.com:${repo}/${prefix}-${dir}.git
-    git-setup
-    git push -u origin main
+    (
+        cd "${dir}"
+        git remote remove origin >/dev/null 2>&1 || true
+        git remote add origin "git@github.com:${repo}/${prefix}-${dir}.git"
+        git-setup
+        git push -u origin main
+    )
 
-    # Done...
-    pop
     echo "====== Done: ${prefix}-${dir}"
 done

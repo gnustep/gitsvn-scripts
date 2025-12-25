@@ -1,16 +1,26 @@
 #!/bin/sh
+set -euo pipefail
 
 DIR=$1
 
-cd ${DIR}
-CWD=`pwd`
-echo "Updating branches in ${CWD}..."
+if [ -z "${DIR:-}" ]; then
+	echo "Usage: update-branches DIR" >&2
+	exit 1
+fi
 
-# make sure to push all branches as well...
+echo "Updating branches in ${DIR}..."
+cd "${DIR}"
 
 echo "* update branches"
+git for-each-ref --format='%(refname:strip=2)' refs/remotes |
+	while IFS=/ read -r remote branch; do
+		[ "${branch}" = "HEAD" ] && continue
+		if git show-ref --verify --quiet "refs/heads/${branch}"; then
+			continue
+		fi
+		git branch --track "${branch}" "${remote}/${branch}"
+	done
 
-for remote in `git branch -r`; do git branch --track $remote; done
 git pull --all
 git push --all
 

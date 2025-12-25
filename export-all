@@ -1,42 +1,81 @@
 #!/bin/sh
+set -euo pipefail
 
-EXPORTURL=$1
-REMOTEURL=$2
-DIR=$3
+DRY_RUN=""
+USE_STDLAYOUT=1
 
-if [ "${EXPORTURL}" = "" ]; then
-   echo "EXPORTURL not defined, please provide EXPORTURL REMOTEURL DIR"
-   exit 0
-fi
-if [ "${REMOTEURL}" = "" ]; then
-   echo "REMOTEURL not defined, please provide EXPORTURL REMOTEURL DIR"
-   exit 0
-fi
-if [ "${DIR}" = "" ]; then
-   echo "DIR not defined, please provide EXPORTURL REMOTEURL DIR"
-   exit 0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--dry-run)
+      DRY_RUN=1
+      shift
+      ;;
+    --nostdlayout)
+      USE_STDLAYOUT=0
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "Usage: export-all [--nostdlayout] [-n|--dry-run] EXPORTURL REMOTEURL DIR" >&2
+      exit 1
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+EXPORTURL=${1:-}
+REMOTEURL=${2:-}
+DIR=${3:-}
+STAGING_DIR="${HOME}/repositories/staging"
+DEST_DIR="${HOME}/repositories/github"
+
+run() {
+  if [ -n "${DRY_RUN}" ]; then
+    echo "[dry-run] $*"
+  else
+    "$@"
+  fi
+}
+
+run_in() {
+  dir=$1
+  shift
+  if [ -n "${DRY_RUN}" ]; then
+    echo "[dry-run] (cd ${dir} && $*)"
+  else
+    (cd "${dir}" && "$@")
+  fi
+}
+
+if [ -z "${EXPORTURL}" ] || [ -z "${REMOTEURL}" ] || [ -z "${DIR}" ]; then
+  echo "Usage: export-all [--nostdlayout] [-n|--dry-run] EXPORTURL REMOTEURL DIR" >&2
+  exit 1
 fi
 
 echo "++++++++"
 
-# Export URL...
 echo "*** Export URL: ${EXPORTURL}"
-cd ${HOME}/repositories/staging
-git svn clone --stdlayout ${EXPORTURL}
+run mkdir -p "${STAGING_DIR}"
+if [ ${USE_STDLAYOUT} -eq 1 ]; then
+  run_in "${STAGING_DIR}" git svn clone --stdlayout "${EXPORTURL}" "${DIR}"
+else
+  run_in "${STAGING_DIR}" git svn clone "${EXPORTURL}" "${DIR}"
+fi
 
-# Add origin
 echo "*** Adding origin: ${REMOTEURL}"
-cd ${DIR}
-git remote add origin ${REMOTEURL}
+run_in "${STAGING_DIR}/${DIR}" git remote add origin "${REMOTEURL}"
 
-# Push
 echo "*** Doing initial push"
-git push -u origin master
-cd ..
+run_in "${STAGING_DIR}/${DIR}" git push -u origin master
 
-# Cleanup
-rm -rf ${HOME}/repositories/github/${DIR}
-mv ${HOME}/repositories/staging/${DIR} ${HOME}/repositories/github 
-
+echo "*** Finalizing local copies"
+run mkdir -p "${DEST_DIR}"
+run rm -rf "${DEST_DIR}/${DIR}"
+run mv "${STAGING_DIR}/${DIR}" "${DEST_DIR}/"
 
 echo "++++++++"

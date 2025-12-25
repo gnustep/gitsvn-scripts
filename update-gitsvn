@@ -1,9 +1,22 @@
 #!/bin/sh
+set -euo pipefail
 
 DIR=$1
+if [ -z "${DIR:-}" ]; then
+	echo "Usage: update-gitsvn DIR" >&2
+	exit 1
+fi
+
 echo "--- Updating ${DIR}"
-cd $DIR
-# update from svn and push to git repo...
-git svn fetch && git svn rebase && git push -f
+cd "${DIR}"
+
+git svn fetch
+git svn rebase
+
+if [ -n "${FORCE_PUSH:-}" ]; then
+	git push --force-with-lease
+else
+	git push
+fi
 
 echo "--- Finished updating."

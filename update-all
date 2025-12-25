@@ -6,6 +6,6 @@ BASEDIR=$1
 # /home/gnustep/repositories/github
 for DIR in ${BASEDIR}/*
 do
-	${HOME}/bin/update-dir ${DIR}
+	update-dir ${DIR}
 done
 echo "**** Done updating all repos..."

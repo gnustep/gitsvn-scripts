@@ -1,3 +1,5 @@
+#  gitsvn-scripts
+
 Scripts for migrating SVN repositories to Git.
 
 ## Quick start
@@ -34,3 +36,4 @@ Scripts for migrating SVN repositories to Git.
 ## Installation
 
 - These scripts should be installed in "bin" under ${HOME}.
+- Or they should be installed in your $PATH.

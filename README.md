@@ -37,3 +37,7 @@ Scripts for migrating SVN repositories to Git.
 
 - These scripts should be installed in "bin" under ${HOME}.
 - Or they should be installed in your $PATH.
+
+## Bugs
+
+Submit bugs on github, please.  Thank you.

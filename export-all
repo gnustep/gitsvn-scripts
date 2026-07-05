@@ -71,7 +71,8 @@ echo "*** Adding origin: ${REMOTEURL}"
 run_in "${STAGING_DIR}/${DIR}" git remote add origin "${REMOTEURL}"
 
 echo "*** Doing initial push"
-run_in "${STAGING_DIR}/${DIR}" git push -u origin master
+run_in "${STAGING_DIR}/${DIR}" git push --set-upstream origin master
+# run_in "${STAGING_DIR}/${DIR}" git push -u origin master
 
 echo "*** Finalizing local copies"
 run mkdir -p "${DEST_DIR}"

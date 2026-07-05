@@ -9,9 +9,15 @@ fi
 
 echo "--- Updating ${DIR}"
 cd "${DIR}"
+echo "Date started..."
+date
 
 git svn fetch
 git svn rebase
+
+echo "Date completed..."
+date
+echo "-- finished"
 
 if [ -n "${FORCE_PUSH:-}" ]; then
 	git push --force-with-lease
